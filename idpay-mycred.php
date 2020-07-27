@@ -1,8 +1,7 @@
 <?php
-
 /*
 Plugin Name: IDPay myCRED
-Version: 1.0.3
+Version: 1.1.0
 Description: IDPay payment gateway for myCRED
 Author: IDPay
 Author URI: https://idpay.ir
@@ -11,7 +10,7 @@ Domain Path: /languages/
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+    exit;
 }
 
 /**
@@ -20,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 function idpay_mycred_load_textdomain() {
-	load_plugin_textdomain( 'idpay-mycred', FALSE, basename( dirname( __FILE__ ) ) . '/languages' );
+    load_plugin_textdomain( 'idpay-mycred', FALSE, basename( dirname( __FILE__ ) ) . '/languages' );
 }
 
 add_action( 'init', 'idpay_mycred_load_textdomain' );
