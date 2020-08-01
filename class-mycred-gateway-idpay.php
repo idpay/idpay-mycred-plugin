@@ -303,7 +303,7 @@ function mycred_idpay_plugin() {
                         }
                     }
 
-                    $log = sprintf( __( 'Payment failed. Status: %s, Track id: %, Card no: %s', 'idpay-mycred' ), $result->status, $result->track_id, $result->payment->card_no );
+                    $log = sprintf( __( 'Payment failed. Status: %s, Track id: %s, Card no: %s', 'idpay-mycred' ), $result->status, $result->track_id, $result->payment->card_no );
                     $this->log_call( $pending_post_id, $log );
                     $mycred->add_to_log(
                         'buy_creds_with_idpay',
@@ -321,7 +321,7 @@ function mycred_idpay_plugin() {
                 } else {
                     $error = $this->getStatus($status);
 
-                    $log = sprintf( __( '%s (Code: %s), Track id: %', 'idpay-mycred' ), $error, $status, $track_id );
+                    $log = sprintf( __( '%s (Code: %s), Track id: %s', 'idpay-mycred' ), $error, $status, $track_id );
                     $this->log_call( $pending_post_id, $log );
                     $mycred->add_to_log(
                         'buy_creds_with_idpay',
