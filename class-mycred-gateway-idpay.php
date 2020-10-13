@@ -205,13 +205,10 @@ function mycred_idpay_plugin() {
                 $org_pending_payment = $pending_payment = $this->get_pending_payment( $pending_post_id );
                 $mycred = mycred( $org_pending_payment->point_type );
 
-                $status   = sanitize_text_field( $_POST['status'] );
-                $track_id = sanitize_text_field( $_POST['track_id'] );
-                $id       = sanitize_text_field( $_POST['id'] );
-                $order_id = sanitize_text_field( $_POST['order_id'] );
-                $amount   = sanitize_text_field( $_POST['amount'] );
-                $card_no  = sanitize_text_field( $_POST['card_no'] );
-                $date     = sanitize_text_field( $_POST['date'] );
+                $status    = !empty($_POST['status'])  ? sanitize_text_field($_POST['status'])   : (!empty($_GET['status'])  ? sanitize_text_field($_GET['status'])   : NULL);
+                $track_id  = !empty($_POST['track_id'])? sanitize_text_field($_POST['track_id']) : (!empty($_GET['track_id'])? sanitize_text_field($_GET['track_id']) : NULL);
+                $id        = !empty($_POST['id'])      ? sanitize_text_field($_POST['id'])       : (!empty($_GET['id'])      ? sanitize_text_field($_GET['id'])       : NULL);
+                $order_id  = !empty($_POST['order_id'])? sanitize_text_field($_POST['order_id']) : (!empty($_GET['order_id'])? sanitize_text_field($_GET['order_id']) : NULL);
 
                 if ( $status == 10 ) {
                     $api_key = $api_key = $this->prefs['api_key'];
@@ -271,17 +268,18 @@ function mycred_idpay_plugin() {
                     }
 
                     if ( $result->status = 100 ) {
-                        $log = sprintf( __( 'Payment succeeded. Status: %s, Track id: %s, Order no: %s', 'idpay-mycred' ), $result->status, $result->track_id, $result->payment->card_no );
+                        $message = sprintf( __( 'Payment succeeded. Status: %s, Track id: %s, Order no: %s', 'idpay-mycred' ), $result->status, $result->track_id, $result->order_id );
+                        $log = $message . ", card-no: " . $result->payment->card_no;
                         add_filter( 'mycred_run_this', function( $filter_args ) use ( $log ) {
                             return $this->mycred_idpay_success_log( $filter_args, $log );
                         } );
 
                         if ( $this->complete_payment( $org_pending_payment, $id ) ) {
 
-                            $this->log_call( $pending_post_id, $log );
+                            $this->log_call( $pending_post_id, $message );
                             $this->trash_pending_payment( $pending_post_id );
 
-                            $return = add_query_arg( 'mycred_idpay_ok', $log, $this->get_thankyou() );
+                            $return = add_query_arg( 'mycred_idpay_ok', $message, $this->get_thankyou() );
                             wp_redirect( $return );
                             exit;
                         } else {
