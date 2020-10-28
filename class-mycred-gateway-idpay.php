@@ -209,6 +209,7 @@ function mycred_idpay_plugin() {
                 $track_id  = !empty($_POST['track_id'])? sanitize_text_field($_POST['track_id']) : (!empty($_GET['track_id'])? sanitize_text_field($_GET['track_id']) : NULL);
                 $id        = !empty($_POST['id'])      ? sanitize_text_field($_POST['id'])       : (!empty($_GET['id'])      ? sanitize_text_field($_GET['id'])       : NULL);
                 $order_id  = !empty($_POST['order_id'])? sanitize_text_field($_POST['order_id']) : (!empty($_GET['order_id'])? sanitize_text_field($_GET['order_id']) : NULL);
+                $params    = !empty($_POST['id']) ? $_POST : $_GET;
 
                 if ( $status == 10 ) {
                     $api_key = $api_key = $this->prefs['api_key'];
@@ -239,7 +240,7 @@ function mycred_idpay_plugin() {
                             $pending_payment->amount,
                             $log,
                             $pending_payment->buyer_id,
-                            $_POST
+                            $params
                         );
 
                         $return = add_query_arg( 'mycred_idpay_nok', $log, $this->get_cancelled() );
@@ -259,7 +260,7 @@ function mycred_idpay_plugin() {
                             $pending_payment->amount,
                             $log,
                             $pending_payment->buyer_id,
-                            $_POST
+                            $params
                         );
 
                         $return = add_query_arg( 'mycred_idpay_nok', $log, $this->get_cancelled() );
@@ -269,7 +270,7 @@ function mycred_idpay_plugin() {
 
                     if ( $result->status = 100 ) {
                         $message = sprintf( __( 'Payment succeeded. Status: %s, Track id: %s, Order no: %s', 'idpay-mycred' ), $result->status, $result->track_id, $result->order_id );
-                        $log = $message . ", card-no: " . $result->payment->card_no;
+                        $log = $message . ", card-no: " . $result->payment->card_no . ", hashed-card-no: " . $result->payment->hashed_card_no;
                         add_filter( 'mycred_run_this', function( $filter_args ) use ( $log ) {
                             return $this->mycred_idpay_success_log( $filter_args, $log );
                         } );
@@ -292,7 +293,7 @@ function mycred_idpay_plugin() {
                                 $pending_payment->amount,
                                 $log,
                                 $pending_payment->buyer_id,
-                                $_POST
+                                $result
                             );
 
                             $return = add_query_arg( 'mycred_idpay_nok', $log, $this->get_cancelled() );
@@ -309,7 +310,7 @@ function mycred_idpay_plugin() {
                         $pending_payment->amount,
                         $log,
                         $pending_payment->buyer_id,
-                        $_POST
+                        $result
                     );
 
                     $return = add_query_arg( 'mycred_idpay_nok', $log, $this->get_cancelled() );
@@ -327,7 +328,7 @@ function mycred_idpay_plugin() {
                         $pending_payment->amount,
                         $log,
                         $pending_payment->buyer_id,
-                        $_POST
+                        $params
                     );
 
                     $return = add_query_arg( 'mycred_idpay_nok', $log, $this->get_cancelled() );
