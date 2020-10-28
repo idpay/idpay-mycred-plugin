@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: IDPay myCRED
-Version: 1.1.0
+Version: 1.1.1
 Description: IDPay payment gateway for myCRED
 Author: IDPay
 Author URI: https://idpay.ir
