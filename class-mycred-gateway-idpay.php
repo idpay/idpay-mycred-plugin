@@ -98,16 +98,13 @@ function mycred_idpay_plugin() {
             }
 
             function preferences() {
-                add_filter( 'mycred_dropdown_currencies', [
-                    $this,
-                    'IDPay_Iranian_currencies',
-                ] );
-
+                add_filter( 'mycred_dropdown_currencies', [$this,'IDPay_Iranian_currencies'] );
                 $prefs = $this->prefs;
                 ?>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'api_key' ); ?>"><?php _e( 'API Key', 'idpay-mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'api_key' ); ?>">
+                    <?php _e( 'API Key', 'idpay-mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
@@ -121,34 +118,39 @@ function mycred_idpay_plugin() {
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'sandbox' ); ?>"><?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'sandbox' ); ?>">
+                    <?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
                             <input id="<?php echo $this->field_id( 'sandbox' ); ?>"
                                    name="<?php echo $this->field_name( 'sandbox' ); ?>"
-                                   <?php echo $prefs['sandbox'] == "on"? 'checked="checked"' : '' ?>
+                                   <?php echo $prefs['sandbox'] == false ? '' : 'checked="checked"' ?>
                                    type="checkbox"/>
                         </div>
                     </li>
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'idpay_display_name' ); ?>"><?php _e( 'Title', 'mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'idpay_display_name' ); ?>">
+                    <?php _e( 'Title', 'mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
                             <input id="<?php echo $this->field_id( 'idpay_display_name' ); ?>"
                                    name="<?php echo $this->field_name( 'idpay_display_name' ); ?>"
                                    type="text"
-                                   value="<?php echo $prefs['idpay_display_name'] ? $prefs['idpay_display_name'] : __( 'IDPay payment gateway', 'idpay-mycred' ); ?>"
+                                   value="<?php
+                                           echo $prefs['idpay_display_name'] ? $prefs['idpay_display_name'] : __( 'IDPay payment gateway', 'idpay-mycred' );
+                                           ?>"
                                    class="long"/>
                         </div>
                     </li>
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'currency' ); ?>"><?php _e( 'Currency', 'mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'currency' ); ?>">
+                    <?php _e( 'Currency', 'mycred' ); ?></label>
                 <ol>
                     <li>
                         <?php $this->currencies_dropdown( 'currency', 'mycred-gateway-idpay-currency' ); ?>
@@ -156,7 +158,8 @@ function mycred_idpay_plugin() {
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'item_name' ); ?>"><?php _e( 'Item Name', 'mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'item_name' ); ?>">
+                    <?php _e( 'Item Name', 'mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
@@ -166,7 +169,8 @@ function mycred_idpay_plugin() {
                                    value="<?php echo $prefs['item_name']; ?>"
                                    class="long"/>
                         </div>
-                        <span class="description"><?php _e( 'Description of the item being purchased by the user.', 'mycred' ); ?></span>
+                        <span class="description">
+                            <?php _e( 'Description of the item being purchased by the user.', 'mycred' ); ?></span>
                     </li>
                 </ol>
 
@@ -184,7 +188,7 @@ function mycred_idpay_plugin() {
                 $new_data['idpay_display_name'] = sanitize_text_field( $data['idpay_display_name'] );
                 $new_data['currency']           = sanitize_text_field( $data['currency'] );
                 $new_data['item_name']          = sanitize_text_field( $data['item_name'] );
-                $new_data['sandbox']            = sanitize_text_field( $data['sandbox'] );
+                $new_data['sandbox']            = sanitize_text_field( $data['sandbox'] ) == 'on' ? 'on' : 'off';
 
                 if ( isset( $data['exchange'] ) ) {
                     foreach ( (array) $data['exchange'] as $type => $rate ) {
@@ -213,7 +217,7 @@ function mycred_idpay_plugin() {
 
                 if ( $status == 10 ) {
                     $api_key = $api_key = $this->prefs['api_key'];
-                    $sandbox = $this->prefs['sandbox'];
+                    $sandbox = $this->prefs['sandbox'] == false ? false : true;
 
                     $data = [
                         'id'       => $id,
@@ -233,7 +237,6 @@ function mycred_idpay_plugin() {
                     $response = $this->call_gateway_endpoint( 'https://api.idpay.ir/v1.1/payment/verify', $args );
                     if ( is_wp_error( $response ) ) {
                         $log = $response->get_error_message();
-                        $this->log_call( $pending_post_id, $log );
                         $mycred->add_to_log(
                             'buy_creds_with_idpay',
                             $pending_payment->buyer_id,
@@ -253,7 +256,6 @@ function mycred_idpay_plugin() {
 
                     if ( $http_status != 200 ) {
                         $log = sprintf( __( 'An error occurred while verifying the transaction. status: %s, code: %s, message: %s', 'idpay-mycred' ), $http_status, $result->error_code, $result->error_message );
-                        $this->log_call( $pending_post_id, $log );
                         $mycred->add_to_log(
                             'buy_creds_with_idpay',
                             $pending_payment->buyer_id,
@@ -276,8 +278,6 @@ function mycred_idpay_plugin() {
                         } );
 
                         if ( $this->complete_payment( $org_pending_payment, $id ) ) {
-
-                            $this->log_call( $pending_post_id, $message );
                             $this->trash_pending_payment( $pending_post_id );
 
                             $return = add_query_arg( 'mycred_idpay_ok', $message, $this->get_thankyou() );
@@ -286,7 +286,6 @@ function mycred_idpay_plugin() {
                         } else {
 
                             $log = sprintf( __( 'An unexpected error occurred when completing the payment but it is done at the gateway. Track id is: %s', 'idpay-mycred', $result->track_id ) );
-                            $this->log_call( $pending_post_id, $log );
                             $mycred->add_to_log(
                                 'buy_creds_with_idpay',
                                 $pending_payment->buyer_id,
@@ -303,7 +302,6 @@ function mycred_idpay_plugin() {
                     }
 
                     $log = sprintf( __( 'Payment failed. Status: %s, Track id: %s, Card no: %s', 'idpay-mycred' ), $result->status, $result->track_id, $result->payment->card_no );
-                    $this->log_call( $pending_post_id, $log );
                     $mycred->add_to_log(
                         'buy_creds_with_idpay',
                         $pending_payment->buyer_id,
@@ -321,7 +319,6 @@ function mycred_idpay_plugin() {
                     $error = $this->getStatus($status);
 
                     $log = sprintf( __( '%s (Code: %s), Track id: %s', 'idpay-mycred' ), $error, $status, $track_id );
-                    $this->log_call( $pending_post_id, $log );
                     $mycred->add_to_log(
                         'buy_creds_with_idpay',
                         $pending_payment->buyer_id,
@@ -385,8 +382,7 @@ function mycred_idpay_plugin() {
                 $is_ajax    = ( isset( $_REQUEST['ajax'] ) && $_REQUEST['ajax'] == 1 ) ? true : false;
                 $callback = add_query_arg( 'payment_id', $this->transaction_id, $this->callback_url() );
                 $api_key  = $this->prefs['api_key'];
-                $sandbox  = $this->prefs['sandbox'];
-
+                $sandbox  = $this->prefs['sandbox'] == false ? false : true;
                 $data = [
                     'order_id' => $this->transaction_id,
                     'amount'   => ( $this->prefs['currency'] == 'toman' ) ? ( $cost * 10 ) : $cost,
