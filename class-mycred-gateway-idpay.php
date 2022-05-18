@@ -98,13 +98,16 @@ function mycred_idpay_plugin() {
             }
 
             function preferences() {
-                add_filter( 'mycred_dropdown_currencies', [$this,'IDPay_Iranian_currencies'] );
+                add_filter( 'mycred_dropdown_currencies', [
+                        $this,
+                        'IDPay_Iranian_currencies',
+                     ] );
                 $prefs = $this->prefs;
                 ?>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'api_key' ); ?>">
-                    <?php _e( 'API Key', 'idpay-mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'api_key' ); ?>"><?php _e( 'API Key', 'idpay-mycred' ); ?></label>
+
                 <ol>
                     <li>
                         <div class="h2">
@@ -118,8 +121,8 @@ function mycred_idpay_plugin() {
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'sandbox' ); ?>">
-                    <?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'sandbox' ); ?>"><?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
+
                 <ol>
                     <li>
                         <div class="h2">
@@ -217,7 +220,7 @@ function mycred_idpay_plugin() {
 
                 if ( $status == 10 ) {
                     $api_key = $api_key = $this->prefs['api_key'];
-                    $sandbox = $this->prefs['sandbox'] == false ? false : true;
+                    $sandbox = !($this->prefs['sandbox'] == false);
 
                     $data = [
                         'id'       => $id,
@@ -278,6 +281,14 @@ function mycred_idpay_plugin() {
                         } );
 
                         if ( $this->complete_payment( $org_pending_payment, $id ) ) {
+                            $mycred->add_to_log(
+                                'buy_creds_with_idpay',
+                                $pending_payment->buyer_id,
+                                $pending_payment->amount,
+                                $log,
+                                $pending_payment->buyer_id,
+                                $result
+                            );
                             $this->trash_pending_payment( $pending_post_id );
 
                             $return = add_query_arg( 'mycred_idpay_ok', $message, $this->get_thankyou() );
