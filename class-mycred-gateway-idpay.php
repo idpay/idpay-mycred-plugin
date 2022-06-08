@@ -98,16 +98,13 @@ function mycred_idpay_plugin() {
             }
 
             function preferences() {
-                add_filter( 'mycred_dropdown_currencies', [
-                        $this,
-                        'IDPay_Iranian_currencies',
-                     ] );
+                add_filter( 'mycred_dropdown_currencies', [$this,'IDPay_Iranian_currencies'] );
                 $prefs = $this->prefs;
                 ?>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'api_key' ); ?>"><?php _e( 'API Key', 'idpay-mycred' ); ?></label>
-
+                       for="<?php echo $this->field_id( 'api_key' ); ?>">
+                    <?php _e( 'API Key', 'idpay-mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
@@ -121,8 +118,8 @@ function mycred_idpay_plugin() {
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'sandbox' ); ?>"><?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
-
+                       for="<?php echo $this->field_id( 'sandbox' ); ?>">
+                    <?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
@@ -135,25 +132,21 @@ function mycred_idpay_plugin() {
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'idpay_display_name' ); ?>">
-                    <?php _e( 'Title', 'mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'idpay_display_name' ); ?>"><?php _e( 'Title', 'mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
                             <input id="<?php echo $this->field_id( 'idpay_display_name' ); ?>"
                                    name="<?php echo $this->field_name( 'idpay_display_name' ); ?>"
                                    type="text"
-                                   value="<?php
-                                           echo $prefs['idpay_display_name'] ? $prefs['idpay_display_name'] : __( 'IDPay payment gateway', 'idpay-mycred' );
-                                           ?>"
+                                   value="<?php echo $prefs['idpay_display_name'] ? $prefs['idpay_display_name'] : __( 'IDPay payment gateway', 'idpay-mycred' ); ?>"
                                    class="long"/>
                         </div>
                     </li>
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'currency' ); ?>">
-                    <?php _e( 'Currency', 'mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'currency' ); ?>"><?php _e( 'Currency', 'mycred' ); ?></label>
                 <ol>
                     <li>
                         <?php $this->currencies_dropdown( 'currency', 'mycred-gateway-idpay-currency' ); ?>
@@ -161,8 +154,7 @@ function mycred_idpay_plugin() {
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'item_name' ); ?>">
-                    <?php _e( 'Item Name', 'mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'item_name' ); ?>"><?php _e( 'Item Name', 'mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
@@ -172,8 +164,7 @@ function mycred_idpay_plugin() {
                                    value="<?php echo $prefs['item_name']; ?>"
                                    class="long"/>
                         </div>
-                        <span class="description">
-                            <?php _e( 'Description of the item being purchased by the user.', 'mycred' ); ?></span>
+                        <span class="description"><?php _e( 'Description of the item being purchased by the user.', 'mycred' ); ?></span>
                     </li>
                 </ol>
 
