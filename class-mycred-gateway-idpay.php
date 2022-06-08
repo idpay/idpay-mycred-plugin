@@ -98,13 +98,16 @@ function mycred_idpay_plugin() {
             }
 
             function preferences() {
-                add_filter( 'mycred_dropdown_currencies', [$this,'IDPay_Iranian_currencies'] );
+                add_filter( 'mycred_dropdown_currencies', [
+                    $this,
+                    'IDPay_Iranian_currencies',
+                ] );
+
                 $prefs = $this->prefs;
                 ?>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'api_key' ); ?>">
-                    <?php _e( 'API Key', 'idpay-mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'api_key' ); ?>"><?php _e( 'API Key', 'idpay-mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
@@ -118,8 +121,7 @@ function mycred_idpay_plugin() {
                 </ol>
 
                 <label class="subheader"
-                       for="<?php echo $this->field_id( 'sandbox' ); ?>">
-                    <?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
+                       for="<?php echo $this->field_id( 'sandbox' ); ?>"><?php _e( 'Sandbox', 'idpay-mycred' ); ?></label>
                 <ol>
                     <li>
                         <div class="h2">
