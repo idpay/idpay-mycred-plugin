@@ -1,8 +1,8 @@
 === IDPay myCRED ===
-Contributors: imikiani, meysamrazmi, vispa
-Tags: idpay, gateway, mycred, point, credit
-Stable tag: 1.1.1
-Tested up to: 5.2
+Contributors: imikiani, meysamrazmi, vispa, Mohammad Malek(MimDeveloper.Tv)
+Tags: idpay, gateway, mycred, point, credit,payment
+Stable tag: 1.2.0
+Tested up to: 6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 A complete documentation for installing this plugin is available [here](https://blog.idpay.ir/helps/171).
 
 == Changelog ==
+
+= 1.2.0, June 13, 2022 =
+* Fix SandBox Mode For Payment In Fake State
+* Important : Fix Save Transaction Status In Wrong Location
 
 = 1.1.1, October 13, 2020 =
 * check GET parameters if POST was empty in relation with IDPay webservices new update.
