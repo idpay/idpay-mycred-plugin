@@ -34,10 +34,10 @@ function mycred_idpay_plugins_loaded()
     function idpay_success_message_handler($template)
     {
         if (!empty($_GET['mycred_idpay_nok']))
-            echo '<div class="mycred_idpay_message error">' . $_GET['mycred_idpay_nok'] . '</div>';
+            echo '<div class="mycred_idpay_message error">' . sanitize_text_field($_GET['mycred_idpay_nok']) . '</div>';
 
         if (!empty($_GET['mycred_idpay_ok']))
-            echo '<div class="mycred_idpay_message success">' . $_GET['mycred_idpay_ok'] . '</div>';
+            echo '<div class="mycred_idpay_message success">' . sanitize_text_field($_GET['mycred_idpay_ok']) . '</div>';
 
         if (!empty($_GET['mycred_idpay_nok']) || !empty($_GET['mycred_idpay_ok']))
             echo '<style>
@@ -231,7 +231,7 @@ function mycred_idpay_plugin()
                 $track_id = !empty($_POST['track_id']) ? sanitize_text_field($_POST['track_id']) : (!empty($_GET['track_id']) ? sanitize_text_field($_GET['track_id']) : NULL);
                 $id = !empty($_POST['id']) ? sanitize_text_field($_POST['id']) : (!empty($_GET['id']) ? sanitize_text_field($_GET['id']) : NULL);
                 $order_id = !empty($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : (!empty($_GET['order_id']) ? sanitize_text_field($_GET['order_id']) : NULL);
-                $params = !empty($_POST['id']) ? $_POST : $_GET;
+                $params = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST : $_GET;
 
                 if ($status == 10 && $this->isNotDoubleSpending($org_pending_payment->payment_id,$order_id, $id) == true) {
                     $api_key = $api_key = $this->prefs['api_key'];
@@ -386,7 +386,7 @@ function mycred_idpay_plugin()
                 $mycred = mycred($type);
 
                 // Amount of points
-                $amount = $mycred->number($_REQUEST['amount']);
+                $amount = $mycred->number(sanitize_text_field($_REQUEST['amount']));
 
                 // Get cost of that points
                 $cost = $this->get_cost($amount, $type);
@@ -397,7 +397,7 @@ function mycred_idpay_plugin()
 
                 // Revisiting pending payment
                 if (isset($_REQUEST['revisit'])) {
-                    $this->transaction_id = strtoupper($_REQUEST['revisit']);
+                    $this->transaction_id = strtoupper(sanitize_text_field($_REQUEST['revisit']));
                 } else {
                     $post_id = $this->add_pending_payment([
                         $to,
@@ -410,7 +410,7 @@ function mycred_idpay_plugin()
                     $this->transaction_id = get_the_title($post_id);
                 }
 
-                $is_ajax = (isset($_REQUEST['ajax']) && $_REQUEST['ajax'] == 1) ? true : false;
+                $is_ajax = (isset($_REQUEST['ajax']) && sanitize_text_field($_REQUEST['ajax']) == 1) ? true : false;
                 $callback = add_query_arg('payment_id', $this->transaction_id, $this->callback_url());
                 $api_key = $this->prefs['api_key'];
                 $sandbox = $this->prefs['sandbox'] == false ? false : true;
@@ -566,7 +566,7 @@ function mycred_idpay_plugin()
                 echo $this->checkout_order();
                 echo $this->checkout_cancel();
                 if (!empty($_GET['idpay_error'])) {
-                    echo '<div class="alert alert-error idpay-error">' . $_GET['idpay_error'] . '</div>';
+                    echo '<div class="alert alert-error idpay-error">' . sanitize_text_field($_GET['idpay_error']) . '</div>';
                     echo '<style>
                         .checkout-footer, .idpay-logo, .checkout-body > img {display: none;}
                         .idpay-error {
