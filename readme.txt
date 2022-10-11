@@ -18,7 +18,11 @@ A complete documentation for installing this plugin is available [here](https://
 
 == Changelog ==
 
-= 1.2.0, June 13, 2022 =
+= 1.2.1, June 18, 2022 =
+* First Official Release
+* Tested Up With Wordpress 6.0 And MyCred Plugin 2.4.4.4
+* Check Double Spending Correct
+* Check Does Not Xss Attack Correct
 * Fix SandBox Mode For Payment In Fake State
 * Important : Fix Save Transaction Status In Wrong Location
 
