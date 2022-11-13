@@ -1,22 +1,32 @@
-=== IDPay myCRED ===
-Contributors: imikiani, meysamrazmi, vispa, Mohammad Malek(MimDeveloper.Tv)
+=== Title & Descriptions ===
+
+title : IDPay For WP myCRED
 Tags: idpay, gateway, mycred, point, credit,payment
-Stable tag: 1.2.0
-Tested up to: 6.0
+Stable tag: 1.2.2
+Tested up to: 6.1
+Contributors: MimDeveloper.Tv (Mohammad-Malek), imikiani, meysamrazmi, vispa
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-[IDPay](https://idpay.ir) payment method for [myCRED](https://wordpress.org/plugins/mycred/).
-
 == Description ==
 
-[IDPay](https://idpay.ir) is one of the Financial Technology providers in Iran. One of the services which IDPay provides is payment gateway service. This plugin enables myCRED to use IDPay as a payment gateway.
+After installing and enabling this plugin, your customers can pay through IDPay gateway.
+For doing a transaction through IDPay gateway, you must have an API Key. You can obtain the API Key by going to your [dashboard](https://idpay.ir/dashboard/web-services) in your IDPay [account](https://idpay.ir/user).
 
 == Installation ==
 
-A complete documentation for installing this plugin is available [here](https://blog.idpay.ir/helps/171).
+0. After creating a Web Service on https://idpay.ir and getting an API Key, follow this instruction:
+1. Activate plugin IDPay for myCRED.
+2. Go to Settings .
+3. In the Payment Gateway section, choose IDPay.
+5. Enter the API Key.
+
+* If you need to use this plugin in Test mode, Select the "Sandbox" checkbox.
 
 == Changelog ==
+
+== 1.2.2, Nov 13, 2022 ==
+* Tested Up With Wordpress 6.1 And MyCred Plugin 2.4.4.4
 
 = 1.2.1, June 18, 2022 =
 * First Official Release
@@ -46,4 +56,4 @@ A complete documentation for installing this plugin is available [here](https://
 * Fix bugs.
 
 = 1.0, May 14, 2019 =
-* First Release.
+* Develope Release.
